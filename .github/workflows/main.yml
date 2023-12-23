@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build and Test Backend
+        run: gradle clean build
+        working-directory: .
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Run Spring Boot Application
+        working-directory: .
+        run:  |
+           gradle clean
+           gradle bootRun
